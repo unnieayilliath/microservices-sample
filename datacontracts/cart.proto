@@ -11,7 +11,7 @@ message nothing {}
 
 message CartItemAddRequest {
     int32 productId = 1;
-    string price = 2;
+    float price = 2;
     int32 quantity = 3;
     string image = 4;
     string name=5;
@@ -19,7 +19,7 @@ message CartItemAddRequest {
 message CartItem {
     int32 cartId = 1;
     int32 productId = 2;
-    string price = 3;
+    float price = 3;
     int32 quantity = 4;
     string image = 5;
     string name=6;

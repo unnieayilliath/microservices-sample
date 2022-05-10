@@ -29,8 +29,8 @@ function addToCart (call, callback) {
         cartItem = {
             "cartId": cartTable.length + 1,
             "productId": call.request.productId,
-            "price": call.request.price,
-            "quantity": call.request.quantity,
+            "price": parseFloat(call.request.price),
+            "quantity": parseInt(call.request.quantity),
             "image": call.request.image,
             "name": call.request.name,
         }
