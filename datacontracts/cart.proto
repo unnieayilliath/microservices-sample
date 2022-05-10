@@ -1,0 +1,36 @@
+syntax = "proto3";
+package cartPackage;
+service Cart {
+    //unary
+    rpc addCartItem(CartItemAddRequest) returns (CartItem);
+    rpc deleteCartItem(CartItemDeleteRequest) returns (CartItemDeleteResponse);
+    //server streaming
+    rpc readCart(nothing) returns (CartItemReadResponse);
+}
+message nothing {}
+
+message CartItemAddRequest {
+    int32 productId = 1;
+    string price = 2;
+    int32 quantity = 3;
+    string image = 4;
+    string name=5;
+}
+message CartItem {
+    int32 cartId = 1;
+    int32 productId = 2;
+    string price = 3;
+    int32 quantity = 4;
+    string image = 5;
+    string name=6;
+}
+message CartItemReadResponse {
+    repeated CartItem items = 1;
+}
+message CartItemDeleteRequest {
+    int32 cartId = 1;
+}
+message CartItemDeleteResponse {
+    bool result = 1;
+    string message=2;
+}

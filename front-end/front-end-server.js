@@ -5,6 +5,12 @@ var bodyParser   = require("body-parser")
 var cookieParser = require("cookie-parser")
 var async        = require("async")
 var http = require("http")
+const grpc = require("grpc");
+const protoLoader = require("@grpc/proto-loader");
+const cartPackageDef = protoLoader.loadSync("../datacontracts/cart.proto", {});
+const cartgRPCObject = grpc.loadPackageDefinition(cartPackageDef);
+const cartPackage = cartgRPCObject.cartPackage;
+const cartClient = new cartPackage.Cart("0.0.0.0:1000",grpc.credentials.createInsecure());
 var cookie_name = "logged_in"
 var session1= {
     name: 'md.sid',
@@ -71,22 +77,6 @@ const app = express()
     res.end();
   }
 
-  /* Public: performs an HTTP GET request to the given URL
-   *
-   * url  - the URL where the external service can be reached out
-   * res  - the response object where the external service's output will be yield
-   * next - callback to be invoked in case of error. If there actually is an error
-   *        this function will be called, passing the error object as an argument
-   *
-   * Examples:
-   *
-   * app.get("/users", function(req, res) {
-   *   helpers.simpleHttpRequest("http://api.example.org/users", res, function(err) {
-   *     res.send({ error: err });
-   *     res.end();
-   *   });
-   * });
-   */
   helpers.simpleHttpRequest = function(url, res, next) {
     request.get(url, function(error, response, body) {
       if (error) return next(error);
@@ -176,18 +166,22 @@ app.get("/getProducts", function (req, res, next) {
   });
 
 app.get("/cart", function (req, res, next) {
-    console.log("Request received: " + req.url );//+ ", " + req.query.custId);
-  //  var custId = helpers.getCustomerId(req, app.get("env"));
-    //console.log("Customer ID: " + custId);
-    request(endpoints.cartsUrl + "/cart",
-        function (error, response, body) {
-            if (error) {
-                return next(error);
+    console.log("Request received: " + req.url );
+    cartClient.readCart({"id":1},(err, response) => {
+        console.log("Response received");
+            if(response){
+                console.log("Cart data returned " + JSON.stringify(response));
+                res.writeHeader(200);
+                res.write(JSON.stringify(response.items));
+                res.end();
             }
-            res.writeHeader(response.statusCode);
-            res.write(body);
-            res.end();
-        });
+            if(err){
+                console.log("Cart data fetch failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(response));
+                res.end();
+            }
+    });
 });
 
 // Delete item from cart
@@ -249,19 +243,20 @@ app.post("/cart", function (req, res, next) {
                     name: item.name
                 }
             };
-            console.log("POST to carts: " + options1.uri
-
-                + " body: " + JSON.stringify(options1.body));
-            request(options1, function (error, response, body) {
-                if (error) {
-                    // callback(error)
-                    //return;
-                }
-                res.writeHeader(response.statusCode);
-                res.write("");
-                res.end();
-            });
-
+            console.log("POST to carts: " + options1.uri + " body: " + JSON.stringify(options1.body));
+            cartClient.addCartItem({ "productId": item.productID,"price": item.price,"quantity":qty,"image":item.image,"name":item.name}, (err, response) => {
+                    if(response){
+                        console.log("Added new item: " + JSON.stringify(response));
+                        res.writeHeader(200);
+                        res.write("");
+                        res.end();
+                    }
+                    if(err){
+                        res.writeHeader(401);
+                        res.write("");
+                        res.end();
+                    }
+                });
         });
 
 });

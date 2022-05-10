@@ -3,8 +3,10 @@
   "version": "0.0.1",
   "description": "cart microservice.",
   "dependencies": {
+    "@grpc/proto-loader": "^0.6.12",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "grpc": "^1.24.11",
     "morgan": "^1.8.1"
   }
 }

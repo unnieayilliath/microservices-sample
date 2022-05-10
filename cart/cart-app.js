@@ -1,91 +1,62 @@
-var express = require("express")
-    , morgan = require("morgan")
-    , path = require("path")
-    , bodyParser = require("body-parser")
+const grpc = require("grpc");
+const protoLoader = require("@grpc/proto-loader")
+const packageDef = protoLoader.loadSync("../datacontracts/cart.proto", {});
+const grpcObject = grpc.loadPackageDefinition(packageDef);
+const cartPackage = grpcObject.cartPackage;
+const server = new grpc.Server();
+server.bind("0.0.0.0:1000", grpc.ServerCredentials.createInsecure());
+server.addService(cartPackage.Cart.service,
+    {
+        "addCartItem": addToCart,
+        "readCart" : returnCart,
+        "deleteCartItem" : removeFromCart
+    });
+server.start();
 
-    , app = express();
-
-
-app.use(morgan('combined'));
-app.use(morgan("dev", {}));
-app.use(bodyParser.json());
-
-//app.use(morgan("dev", {}));
-var cart = [];
-
-app.post("/add", function (req, res, next) {
-    var obj = req.body;
-    console.log("add ");
-    console.log("Attempting to add to cart: " + JSON.stringify(req.body));
-    var max = 0;
-    var ind = 0;
-    for (ind = 0; ind < cart.length; ind++)
-        if (max < cart[ind].cartid)
-            max = cart[ind].cartid;
-    var cartid = max + 1;
+const cartTable = []
+// this method adds an item to the cart ( an in memory array in this sample)
+function addToCart (call, callback) {
     // find the product in the cart
-    var cartItem=cart.find(c=> c.productID==obj.productID)
-    // check if it exists, if it does not exists the value is undefined
+    let cartItem=cartTable.find(c=> c.productId==call.request.productId);
     if(cartItem){
+        console.log("Updating product quantity in cart");
         // the product already exists in cart, so just update the number and price
-        cartItem.quantity+=parseInt(obj.quantity);
-        cartItem.price+=parseFloat(obj.price);
+        cartItem.quantity+=parseInt(call.request.quantity);
+        cartItem.price+=parseFloat(call.request.price);
     }else{
+        console.log("Adding new product to cart");
         // product is new in the cart, so add 
-        var data = {
-            "cartid": cartid,
-            "productID": obj.productID,
-            "name": obj.name,
-            "price": parseFloat(obj.price),
-            "image": obj.image,
-            "quantity": parseInt(obj.quantity)
-        };
-        cart.push(data);
+        cartItem = {
+            "cartId": cartTable.length + 1,
+            "productId": call.request.productId,
+            "price": call.request.price,
+            "quantity": call.request.quantity,
+            "image": call.request.image,
+            "name": call.request.name,
+        }
+        cartTable.push(cartItem)
     }
-    console.log(JSON.stringify(cart));
-    res.status(201);
-    res.send("");
-});
+    callback(null, cartItem);
+}
 
-/* toDO */
-app.delete("/cart/items/:id", function (req, res, next) {
-    var body = '';
-    console.log("Delete item from cart: for custId " + req.url + ' ' +
-        req.params.id.toString());
-    // find the index of the product in array
-    const index=cart.findIndex(c=> parseInt(c.cartid)==parseInt(req.params.id))
+// this method streams cart items back to client
+function returnCart(call, callback) {
+    console.log("Received request");
+    callback(null, {items:cartTable});
+}
+
+// this method adds an item to the cart ( an in memory array in this sample)
+function removeFromCart (call, callback) {
+    let response={}
+    const index=cart.findIndex(c=> parseInt(c.cartid)==parseInt(call.request.cartId))
     console.log(`Item found in cart at index = ${index}`)
     if(index>-1){
         // remove product from array
         cart.splice(index,1);
-        res.send("Item is removed from cart");
-        res.status(201);
+        response={result:true,message:""}
+        
     }else{
-        res.send("Item is not found in cart!")
-        res.status(500);
+        response={result:false,message:"Item not found"}
     }
-});
-
-
-app.get("/cart", function (req, res, next) {
-
-
-    //var custId = req.params.custId;
-    //console.log("getCart" + custId);
-
-
-    //console.log('custID ' + custId);
-
-
-    console.log(JSON.stringify(cart, null, 2));
-
-    res.send(JSON.stringify(cart));
-    console.log("cart sent");
-
-});
-
-
-var server = app.listen(process.env.PORT || 3003, function () {
-    var port = server.address().port;
-    console.log("App now running in %s mode on port %d", app.get("env"), port);
-});
+    callback(null, response);
+}
