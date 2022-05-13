@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <title>Shop Application</title>
+<head>
+    <link rel="stylesheet" href="./assets/style.css">
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/newproduct.js"></script>
+    <script type="text/javascript" src="./js/sidenav.js"></script>
+
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Shop</h1>
+    </header>
+    <nav>
+        <ul id="sideNav">
+        </ul>
+    </nav>
+    <article>
+        <div id="newProduct">
+            <h1>New Product</h1>
+            <p>
+            <form id="newProductForm" action="">
+                Name: <span style="color: red;">*</span><br>
+                <input type="text" name="name" required value="">
+                <br>
+                Quantity:<span style="color: red;">*</span><br>
+                <!--allow any positive integer and mark it as required column-->
+                <input type="number" min="1" name="quantity" required onkeydown="javascript:return event.keyCode === 8 ||  event.keyCode === 46 ? true : !isNaN(Number(event.key))" value="">
+                <br>
+                Price per unit:<span style="color: red;">*</span><br>
+                <!--allow any positive decimal-->
+                <input type="" name="price" min="0.01" step=".01" required onkeydown="javascript:return event.keyCode === 8 ||  event.keyCode === 46 || event.keyCode === 190 ? true : !isNaN(Number(event.key))" value="" >
+                <br>
+              <!--   Image:<br>
+                <input type="file" id="imageUploadCtrl" accept="image/*"> -->
+                <input type="submit">
+            </form>
+        </div>
+    </article>
+</div>
+</body>
+</html>
