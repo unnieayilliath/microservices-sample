@@ -21,20 +21,36 @@
     </nav>
     <article>
         <div id="register">
+            <h3 id="validationMessage" style="color:orange ;"></h3>
             <h1>Register</h1>
             <p>
             <form id="registerForm" action="">
-                Name:<br>
-                <input type="text" name="name" value="">
+                Username:<span style="color: red">*</span><br>
+                <input type="text" name="username" value="" required>
                 <br>
-                Address:<br>
-                <input type="text" name="address" value="">
+                Password:<span style="color: red">*</span><br>
+                <input id="p1" type="password" name="password" value="" required>
                 <br>
-                Password:<br>
-                <input type="text" name="password" value="">
+                Re-enter Password:<span style="color: red">*</span><br>
+                <input id="p2" type="password" name="password2" value="" required>
                 <br>
+                Firstname:<span style="color: red">*</span><br>
+                <input type="text" name="firstname" value="" required>
                 <br>
-                <input type="submit">
+                Lastname:<span style="color: red">*</span><br>
+                <input type="text" name="lastname" value="" required>
+                <br>
+                Email:<span style="color: red">*</span><br>
+                <input type="email" name="email" value="" required>
+                <br>
+                Phone number:<br>
+                <input type="tel" name="phonenumber" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" value="">
+                <br>
+                <small>Format: 123-456-7890</small>
+                <br>
+               
+                <br>
+                <input type="submit" text="Create Account">
             </form>
         </div>
     </article>

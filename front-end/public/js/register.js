@@ -4,8 +4,12 @@ $(document).ready(function () {
     // register form submit event handler
     $('#registerForm').on( "submit",function(event) {
         event.preventDefault();
-        $("#register").hide();
         var o={};
+        const password1=document.getElementById("p1").value;
+        const password2=document.getElementById("p2").value;
+        if(password1!=password2){
+            document.getElementById("validationMessage").innerHTML="Passwords do not match! Please try again"
+        }
         var a = $('#registerForm').serializeArray();
         $.each(a, function() {
             if (o[this.name] !== undefined) {
@@ -26,8 +30,7 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: fd,
             success: function () {
-
-                alert("Thanks!");
+                alert("Account is registered!")
             }
         });
 

@@ -28,7 +28,7 @@ function displaySideNav() {
             if(loggedInUser!=""){
                 navHtml+="<li><button onclick='logout()'>" +  nav[i].text + "</button></li>";
             }
-        }else if(nav[i].text=="Login"){
+        }else if(nav[i].text=="Login" || nav[i].text=="Register"){
             if(loggedInUser=="")
             {
                 navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
