@@ -22,6 +22,23 @@ function redirect(page){
 function logout(){
     setCookie("user","",0);
     setCookie("isAdmin",false);
+    //clear server side variables
+    $.ajax
+    ({
+        type: "POST",
+        url: "/logout",
+        contentType: 'application/json',
+        data: "",
+        success: function (data) {
+            const response=JSON.parse(data);
+            if(response.result){
+              alert(response.message);
+                window.location.reload();
+            }else{
+                alert(response.message);
+            }
+        }
+    });
     window.location.assign("login.html");
 }
 function displaySideNav() {
@@ -33,7 +50,7 @@ function displaySideNav() {
 
         if(nav[i].AdminOnly){
           //nav only for admins
-          if(isAdmin){
+          if(isAdmin=="true"){
             navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
           }
         }else if(nav[i].display=="authenticated"){

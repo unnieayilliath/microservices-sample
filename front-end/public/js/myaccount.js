@@ -36,6 +36,37 @@ $(document).ready(function () {
             }
         });
     });
+
+    // reset password
+    $('#changePasswordForm').on("submit",function(event) {
+        event.preventDefault();
+        const password1=document.getElementById("p1").value;
+        const password2=document.getElementById("p2").value;
+        if(password1!=password2){
+            alert("Passwords do not match! Please try again");
+            return false;
+        }
+        let formData={
+            "oldpassword":document.getElementById("oldPassword").value,
+            "newpassword":password1,
+        }
+        $.ajax
+        ({
+            type: "POST",
+            url: "/resetpassword",
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (data) {
+                const response=JSON.parse(data);
+                if(response.result){
+                  alert(response.message);
+                  logout();
+                }else{
+                    alert(response.message);
+                }
+            }
+        });
+    });
 });
 let accountData={};
 function getAccountDetails() {
