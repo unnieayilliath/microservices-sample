@@ -2,6 +2,10 @@
     "name": "node-api",
     "main": "server.js",
     "dependencies": {
-       
+        "@grpc/proto-loader": "^0.6.12",
+        "grpc": "^1.24.11",
+        "mysql": "^2.18.1",
+        "mysql2": "^2.3.3",
+        "util": "^0.12.4"
     }
 }

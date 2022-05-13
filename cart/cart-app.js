@@ -48,11 +48,11 @@ function returnCart(call, callback) {
 // this method adds an item to the cart ( an in memory array in this sample)
 function removeFromCart (call, callback) {
     let response={}
-    const index=cart.findIndex(c=> parseInt(c.cartid)==parseInt(call.request.cartId))
+    const index=cartTable.findIndex(c=> parseInt(c.cartid)==parseInt(call.request.cartId))
     console.log(`Item found in cart at index = ${index}`)
     if(index>-1){
         // remove product from array
-        cart.splice(index,1);
+        cartTable.splice(index,1);
         response={result:true,message:""}
         
     }else{
