@@ -3,7 +3,6 @@ $(document).ready(function () {
     // register form submit handler
     $('#logonForm').on( "submit",function(event) {
         event.preventDefault();
-        $("#login").hide();
         var o={};
         var a = $('#logonForm').serializeArray();
         $.each(a, function() {
@@ -26,10 +25,14 @@ $(document).ready(function () {
             data: fd,
             success: function (data) {
                 const userInfo=JSON.parse(data);
-                setCookie("user",userInfo.firstname+" " + userInfo.lastname,1);
-                setCookie("isAdmin",userInfo.isAdmin);
-                //redirect user to home page
-                window.location.assign("index.html");
+                if(userInfo.username){
+                    setCookie("user",userInfo.firstname+" " + userInfo.lastname,1);
+                    setCookie("isAdmin",userInfo.isAdmin);
+                    //redirect user to home page
+                    window.location.assign("index.html");
+                }else{
+                    alert("Authentication failed: Invalid Username or password. Please try again");
+                }
             }
         });
     });
