@@ -121,6 +121,7 @@
                 id: prodid,
                 qty : num
             };
+            console.log(dat);
             $.ajax
             ({
                 type: "POST",
@@ -213,7 +214,7 @@
                 out += '<td>' + cart[i].price + '</td>';
                 out += '<td> <img src="';
                 out += "images/" + cart[i].image + '" style="width:104px;height:100px;">';
-                out += '<td> <button onclick="deleteCartItem(' + cart[i].cartid;
+                out += '<td> <button onclick="deleteCartItem(' + cart[i].cartId;
                 out1 = ")" + '">Delete</button></td>';
                 out += out1;
                 out += '<td>' + cart[i].quantity + '</td>';

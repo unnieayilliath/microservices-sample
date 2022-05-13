@@ -74,7 +74,8 @@ async function returnCatalogue(call, callback) {
 async function getProduct (call, callback) {
     let product={};
     try{
-        const rows=await query(`SELECT * FROM products where productID=${product.id}`);
+        console.log(call);
+        const rows=await query(`SELECT * FROM products where productID=${call.request.productID}`);
         if(rows!=null && rows.length>0){
             product=rows[0];
         }

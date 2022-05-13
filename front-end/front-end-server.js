@@ -127,7 +127,11 @@ app.get("/getProducts", function (req, res, next) {
             if(response){
                 console.log("Catalogue data returned " + JSON.stringify(response));
                 res.writeHeader(200);
+                if(response.items){
                 res.write(JSON.stringify(response.items));
+                }else{
+                res.write(JSON.stringify([]));
+                }
                 res.end();
             }
             if(err){
@@ -163,7 +167,11 @@ app.get("/cart", function (req, res, next) {
             if(response){
                 console.log("Cart data returned " + JSON.stringify(response));
                 res.writeHeader(200);
-                res.write(JSON.stringify(response.items));
+                if(response.items){
+                    res.write(JSON.stringify(response.items));
+                }else{
+                    res.write(JSON.stringify([]));
+                }
                 res.end();
             }
             if(err){
@@ -183,7 +191,7 @@ app.post("/delete", function (req, res, next) {
             if(response){
                 console.log("Cart item deleted " + JSON.stringify(response));
                 res.writeHeader(200);
-                res.write(JSON.stringify(response.items));
+                res.write(JSON.stringify(response));
                 res.end();
             }
             if(err){
@@ -203,9 +211,9 @@ app.post("/cart", function (req, res, next) {
         return;
     }
     var qty = req.body.qty;
-    catalogueClient.getProduct({"productId":req.body.id},(err, prodResponse) => {
-        if(response){
-            cartClient.addCartItem({ "productId": prodResponse.productId,"price": prodResponse.price,"quantity":qty,"image":prodResponse.image,"name":prodResponse.name}, (err, response) => {
+    catalogueClient.getProduct({"productID":req.body.id},(err, prodResponse) => {
+        if(prodResponse){
+            cartClient.addCartItem({ "productID": prodResponse.productID,"price": prodResponse.price,"quantity":qty,"image":prodResponse.image,"name":prodResponse.name}, (err, response) => {
                 if(response){
                     console.log("Added new item: " + JSON.stringify(response));
                     res.writeHeader(200);

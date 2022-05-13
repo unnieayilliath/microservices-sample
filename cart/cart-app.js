@@ -17,7 +17,7 @@ const cartTable = []
 // this method adds an item to the cart ( an in memory array in this sample)
 function addToCart (call, callback) {
     // find the product in the cart
-    let cartItem=cartTable.find(c=> c.productId==call.request.productId);
+    let cartItem=cartTable.find(c=> c.productID==call.request.productID);
     if(cartItem){
         console.log("Updating product quantity in cart");
         // the product already exists in cart, so just update the number and price
@@ -28,7 +28,7 @@ function addToCart (call, callback) {
         // product is new in the cart, so add 
         cartItem = {
             "cartId": cartTable.length + 1,
-            "productId": call.request.productId,
+            "productID": call.request.productID,
             "price": parseFloat(call.request.price),
             "quantity": parseInt(call.request.quantity),
             "image": call.request.image,
@@ -48,7 +48,7 @@ function returnCart(call, callback) {
 // this method adds an item to the cart ( an in memory array in this sample)
 function removeFromCart (call, callback) {
     let response={}
-    const index=cartTable.findIndex(c=> parseInt(c.cartid)==parseInt(call.request.cartId))
+    const index=cartTable.findIndex(c=> parseInt(c.cartId)==parseInt(call.request.cartId))
     console.log(`Item found in cart at index = ${index}`)
     if(index>-1){
         // remove product from array

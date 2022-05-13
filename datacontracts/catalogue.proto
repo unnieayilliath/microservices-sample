@@ -16,7 +16,7 @@ message ProductAddRequest {
     string image = 4;
 }
 message Product {
-    int32 productId = 2;
+    int32 productID = 2;
     float price = 3;
     int32 quantity = 4;
     string image = 5;
@@ -26,5 +26,5 @@ message CatalogueReadResponse {
     repeated Product items = 1;
 }
 message ProductGetRequest {
-    int32 productId = 1;
+    int32 productID = 1;
 }
