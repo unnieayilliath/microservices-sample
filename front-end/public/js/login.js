@@ -25,9 +25,13 @@ $(document).ready(function () {
             contentType: 'application/json',
             data: fd,
             success: function (data) {
-                $('#logonmessage').html(data);
-                alert("Thanks!"+data);
+                const userInfo=JSON.parse(data);
+                setCookie("user",userInfo.firstname+" " + userInfo.lastname,1);
+                setCookie("isAdmin",userInfo.isAdmin);
+                //redirect user to home page
+                window.location.assign("index.html");
             }
         });
     });
 });
+

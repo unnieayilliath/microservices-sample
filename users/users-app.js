@@ -26,7 +26,7 @@ const query = util.promisify(db.query).bind(db);
 async function register (call, callback) {
     console.log("Register new user");
     const result=false;
-    const validationResult=await validateUser(call.request.name);
+    const validationResult=await validateUser(call.request.username);
     if(validationResult){
         // validation passed
         result=await CreateNewUserAccount(call);
@@ -36,7 +36,7 @@ async function register (call, callback) {
 
 async function CreateNewUserAccount(call) {
     try{
-         await query("INSERT INTO Customer (name, password, address) VALUES (?, ?, ?)", [call.request.name, call.request.password, call.request.address]);
+         await query("INSERT INTO Customer (username, password, address) VALUES (?, ?, ?)", [call.request.username, call.request.password, call.request.address]);
         return true;
     }catch(err){
         console.log(err);
@@ -47,7 +47,7 @@ async function CreateNewUserAccount(call) {
 
 async function validateUser(username) {
     try{
-        const rows=await db.query(`SELECT * FROM Customer where name=${username}`);
+        const rows=await query(`SELECT * FROM Customer where username='${username}'`);
         return rows != null && rows.length > 0;
     }
     catch(err){
@@ -60,7 +60,7 @@ async function returnUsers(call, callback) {
     let products=[];
     try{
         console.log("Received request");
-        products=await db.query("SELECT * FROM Customer")
+        products=await query("SELECT * FROM Customer")
     }catch(err){
         console.log("Product read query failed: " + err);
         return false;
@@ -70,8 +70,9 @@ async function returnUsers(call, callback) {
 // 
 async function login (call, callback) {
     let product={};
+    console.log("Validating authentication request for " +call.request.username)
     try{
-        const rows=await db.query(`SELECT * FROM Customer where name=${call.request.name} and password=${call.request.password}`);
+        const rows=await query(`SELECT * FROM Customer where username='${call.request.username}' and password='${call.request.password}'`);
         if(rows!=null && rows.length>0){
             product=rows[0];
         }

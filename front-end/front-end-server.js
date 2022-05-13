@@ -241,7 +241,7 @@ app.post("/cart", function (req, res, next) {
 app.post("/login", function(req, res, next) {
 
     console.log("logging in  Customer: " + JSON.stringify(req.body));
-    userClient.login({"name":body.name,"password":body.password},(err,response)=>{
+    userClient.login({"username":req.body.name,"password":req.body.password},(err,response)=>{
         if (err !== null ) {
             console.log("error "+JSON.stringify(err));
             res.status(500);
@@ -251,7 +251,7 @@ app.post("/login", function(req, res, next) {
         if (response) {
             console.log(response);
             res.status(200);
-            res.end(response);
+            res.end(JSON.stringify(response));
             return;
         }
     });
