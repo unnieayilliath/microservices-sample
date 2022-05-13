@@ -260,17 +260,23 @@ app.post("/login", function(req, res, next) {
 // Create Customer - TO BE USED FOR TESTING ONLY (for now)
 app.post("/register", function(req, res, next) {
     console.log("Posting Customer: " + JSON.stringify(req.body));
-    userClient.register({"name":body.name,"password":body.password,"address":body.address},(err,response)=>{
+    userClient.register({"username":req.body.username,
+                        "password":req.body.password,
+                        "firstname":req.body.firstname,
+                        "lastname":req.body.lastname,
+                        "email":req.body.email,
+                        "phonenumber":req.body.phonenumber
+    },(err,response)=>{
         if (err !== null ) {
             console.log("error "+JSON.stringify(err));
             res.status(500);
-            res.end();
+            res.end(JSON.stringify(false));
             return;
         }
         if (response) {
             console.log(response);
             res.status(200);
-            res.end();
+            res.end(JSON.stringify(response));
             return;
         }
     });

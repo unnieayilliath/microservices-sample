@@ -1,7 +1,7 @@
 syntax = "proto3";
 package userPackage;
 service User {
-    rpc register(UserRegisterRequest) returns (UserAccount);
+    rpc register(UserRegisterRequest) returns (UserRegisterResponse);
     rpc login(UserLoginRequest) returns (UserAccount);
 }
 message nothing {}
@@ -9,7 +9,10 @@ message nothing {}
 message UserRegisterRequest {
     string username=2;
     string password=3;
-    string address=4;
+    string firstname=4;
+    string lastname=5;
+    string email=6;
+    string phonenumber=7;
 }
 message UserLoginRequest {
     string username=2;
@@ -23,3 +26,7 @@ message UserAccount {
     bool isAdmin=5;
 }
 
+message UserRegisterResponse {
+    bool result=1;
+    string message=2;
+}

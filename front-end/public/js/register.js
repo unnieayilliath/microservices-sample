@@ -29,8 +29,14 @@ $(document).ready(function () {
             url: "/register",
             contentType: 'application/json',
             data: fd,
-            success: function () {
-                alert("Account is registered!")
+            success: function (response) {
+                const responseData=JSON.parse(response);
+                if(responseData.result){
+                    alert("Account created successfuly!. Please login with the registered account.");
+                    window.location.assign("login.html");
+                }else{
+                    document.getElementById("validationMessage").innerHTML=responseData.message;
+                }
             }
         });
 

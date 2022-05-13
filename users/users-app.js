@@ -25,18 +25,29 @@ const query = util.promisify(db.query).bind(db);
 // this method adds an item to the cart ( an in memory array in this sample)
 async function register (call, callback) {
     console.log("Register new user");
-    const result=false;
-    const validationResult=await validateUser(call.request.username);
-    if(validationResult){
+    const response={"result":false,"message":""};
+    const isUsernameTaken=await checkUserExists(call.request.username);
+    if(!isUsernameTaken){
         // validation passed
-        result=await CreateNewUserAccount(call);
+        response.result=await CreateNewUserAccount(call);
+        if(response.result){
+            response.message="Account is created";
+        }else{
+            response.message="Operation failed: Please try again";
+        }
+        
+    }else{
+        console.log("Username already taken");
+        response.result=false;
+        response.message="This username is not available!";
     }
-    callback(null, result);
+    console.log(JSON.stringify(response));
+    callback(null, response);
 }
 
 async function CreateNewUserAccount(call) {
     try{
-         await query("INSERT INTO Customer (username, password, address) VALUES (?, ?, ?)", [call.request.username, call.request.password, call.request.address]);
+         await query("INSERT INTO Customer (username, password, firstname, lastname, email, phonenumber) VALUES (?, ?, ?,?,?,?)", [call.request.username, call.request.password, call.request.firstname, call.request.lastname, call.request.email, call.request.phonenumber]);
         return true;
     }catch(err){
         console.log(err);
@@ -45,7 +56,7 @@ async function CreateNewUserAccount(call) {
     }
 }
 
-async function validateUser(username) {
+async function checkUserExists(username) {
     try{
         const rows=await query(`SELECT * FROM Customer where username='${username}'`);
         return rows != null && rows.length > 0;
