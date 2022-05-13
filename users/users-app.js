@@ -18,7 +18,7 @@ var db = mysql.createConnection({
     host:     'localhost',
     user:     'root',
     password: 'password',
-    database: 'shop'
+    database: 'customerdb'
 });
 // for async/await mysql queries
 const query = util.promisify(db.query).bind(db);
