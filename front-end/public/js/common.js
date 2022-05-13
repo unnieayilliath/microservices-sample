@@ -6,35 +6,53 @@ $(document).ready(function () {
 });
 
 const nav=[
-    {"text":"Show Products","page":"index.html"},
-    {"text":"Show Cart","page":"cart.html"},
-    {"text":"Login","page":"login.html"},
-    {"text":"Logout","page":""},
-    {"text":"Register","page":"register.html"},
-    {"text":"New Product","page":"newproduct.html"}
+    {"text":"Home","page":"index.html","AdminOnly":false,"display":"always"},
+    {"text":"Show Cart","page":"cart.html","AdminOnly":false,"display":"always"},
+    {"text":"Logout","page":"","AdminOnly":false,"display":"authenticated"},
+    {"text":"My Account","page":"myaccount.html","AdminOnly":false,"display":"authenticated"},
+    {"text":"My Orders","page":"newpmyorders.html","AdminOnly":false,"display":"authenticated"},
+    {"text":"Show Customers","page":"customers.html","AdminOnly":true,"display":"authenticated"},
+    {"text":"New Product","page":"newproduct.html","AdminOnly":true,"display":"authenticated"},
+    {"text":"Login","page":"login.html","AdminOnly":false,"display":"anonymous"},
+    {"text":"Register","page":"register.html","AdminOnly":false,"display":"anonymous"},
   ]
 function redirect(page){
     window.location.assign(page);
 }
 function logout(){
     setCookie("user","",0);
+    setCookie("isAdmin",false);
     window.location.assign("login.html");
 }
 function displaySideNav() {
     const loggedInUser=getCookie("user");
+    const isLoggedInSession=loggedInUser!="";
+    const isAdmin=getCookie("isAdmin");
     let navHtml=""
     for(i=0; i<nav.length;i++){
-        if(nav[i].text=="Logout"){
-            if(loggedInUser!=""){
-                navHtml+="<li><button onclick='logout()'>" +  nav[i].text + "</button></li>";
-            }
-        }else if(nav[i].text=="Login" || nav[i].text=="Register"){
-            if(loggedInUser=="")
-            {
-                navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
-            }
-        }else{
+
+        if(nav[i].AdminOnly){
+          //nav only for admins
+          if(isAdmin){
             navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
+          }
+        }else if(nav[i].display=="authenticated"){
+          //nav only during authenticated browsing
+          if(isLoggedInSession){
+            if(nav[i].text=="Logout"){
+              navHtml+="<li><button onclick='logout()'>" +  nav[i].text + "</button></li>";
+            }else{
+              navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
+            }
+          }
+        }else if(nav[i].display=="anonymous"){
+          //nav only during anonymous browsing
+          if(!isLoggedInSession){
+              navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
+          }
+        }else{
+          // navigation which are always present
+          navHtml+="<li><button onclick='redirect(&quot;"+nav[i].page +"&quot;)'>" +  nav[i].text + "</button></li>";
         }
     }
     document.getElementById("sideNav").innerHTML = navHtml;

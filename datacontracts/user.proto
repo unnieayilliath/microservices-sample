@@ -1,8 +1,10 @@
 syntax = "proto3";
 package userPackage;
 service User {
-    rpc register(UserRegisterRequest) returns (UserRegisterResponse);
+    rpc register(UserRegisterRequest) returns (UserActionResponse);
     rpc login(UserLoginRequest) returns (UserAccount);
+    rpc updatePayment(UpdatePaymentMethod) returns (UserActionResponse);
+    rpc resetPassword(ResetPasswordRequest) returns (UserActionResponse);
 }
 message nothing {}
 
@@ -26,7 +28,26 @@ message UserAccount {
     bool isAdmin=5;
 }
 
-message UserRegisterResponse {
+message UserActionResponse {
     bool result=1;
     string message=2;
+}
+
+message UpdatePaymentMethodRequest {
+    string username=1;
+    string creditcardprovider=2;
+    string creditcardnumber=3;
+    string creditcardname=4;
+    string creditcardexpiry=5;
+}
+message ResetPasswordRequest{
+    string username=1;
+    string oldpassword=2;
+    string newpassword=3;
+}
+message AddAddressRequest{
+    string username=1;
+    string streetname=2;
+    string city=3;
+    string country=4;
 }
