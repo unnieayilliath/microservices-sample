@@ -2,9 +2,11 @@ syntax = "proto3";
 package userPackage;
 service User {
     rpc register(UserRegisterRequest) returns (UserActionResponse);
-    rpc login(UserLoginRequest) returns (UserAccount);
-    rpc updatePayment(UpdatePaymentMethod) returns (UserActionResponse);
+    rpc login(UserLoginRequest) returns (UserLoginResponse);
+    rpc updatePayment(UpdatePaymentMethodRequest) returns (UserActionResponse);
     rpc resetPassword(ResetPasswordRequest) returns (UserActionResponse);
+    rpc getAccountDetails(UserAccountDetailsRequest) returns (UserAccountDetailsResponse);
+    rpc updateAccountDetails(UserAccountDetailsUpdateRequest) returns (UserActionResponse);
 }
 message nothing {}
 
@@ -20,7 +22,26 @@ message UserLoginRequest {
     string username=2;
     string password=3;
 }
-message UserAccount {
+message UserAccountDetailsResponse {
+    string username=2;
+    string firstname=3;
+    string lastname=4;
+    string email=8;
+    string phonenumber=5;
+    string creditcardprovider=6;
+    string creditcardendingnumber=7;
+}
+message UserAccountDetailsUpdateRequest {
+    string username=2;
+    string firstname=3;
+    string lastname=4;
+    string email=8;
+    string phonenumber=5;
+}
+message UserAccountDetailsRequest {
+    string username=2;
+}
+message UserLoginResponse {
     int32 id=1;
     string username=2;
     string firstname=3;

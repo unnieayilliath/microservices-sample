@@ -10,7 +10,11 @@ server.bind("0.0.0.0:1002", grpc.ServerCredentials.createInsecure());
 server.addService(userPackage.User.service,
     {
         "register": register,
-        "login" : login
+        "login" : login,
+        "updatePayment" : updatePayment,
+        "resetPassword" : resetPassword,
+        "getAccountDetails" : getAccountDetails,
+        "updateAccountDetails": updateAccountDetails
     });
 
 server.start();
@@ -68,27 +72,90 @@ async function checkUserExists(username) {
 }
 // this method streams cart items back to client
 async function returnUsers(call, callback) {
-    let products=[];
+    let users=[];
     try{
         console.log("Received request");
-        products=await query("SELECT * FROM Customer")
+        users=await query("SELECT * FROM Customer")
     }catch(err){
-        console.log("Product read query failed: " + err);
+        console.log("User read query failed: " + err);
         return false;
     }
-    callback(null, {items:products});
+    callback(null, {items:users});
 }
 // 
 async function login (call, callback) {
-    let product={};
+    let response={};
     console.log("Validating authentication request for " +call.request.username)
     try{
         const rows=await query(`SELECT * FROM Customer where username='${call.request.username}' and password='${call.request.password}'`);
         if(rows!=null && rows.length>0){
-            product=rows[0];
+            response=rows[0];
+        }
+    }catch(err){
+        console.log("Authentication query failed: " + err);
+    }
+    callback(null, response);
+}
+
+async function getAccountDetails (call, callback) {
+    let user={};
+    console.log("Getting account details for " +call.request.username)
+    try{
+        const rows=await query(`SELECT * FROM Customer where username='${call.request.username}'`);
+        if(rows!=null && rows.length>0){
+            user=rows[0];
+            user.creditcardendingnumber=rows[0].creditcardnumber.substring(rows[0].creditcardnumber.length-4,rows[0].creditcardnumber.length);
         }
     }catch(err){
         console.log("Product read query failed: " + err);
     }
-    callback(null, product);
+    callback(null, user);
+}
+
+async function resetPassword (call, callback) {
+    let response={};
+    console.log("Resetting password for" +call.request.username)
+    try{
+        let rows=await query(`SELECT * FROM Customer where username='${call.request.username}' and password='${call.request.oldpassword}'`);
+        if(rows!=null && rows.length>0){
+            // password verification successful
+            rows=await query(`UPDATE Customer SET password='${call.request.newpassword}' WHERE username='${call.request.username}'`);
+            response={"result":true, "message":"Password is updated"}
+
+        }else{
+            response={"result":false, "message":"Please enter current password correctly"}
+        }
+    }catch(err){
+        console.log("Password reset failed: " + err);
+        response={"result":false, "message":"Something went wrong. Please try again"}
+    }
+    callback(null, response);
+}
+
+async function updatePayment (call, callback) {
+    let response={};
+    console.log("Update payment for" +call.request.username)
+    try{
+            // password verification successful
+            let rows=await query(`UPDATE Customer SET creditcardprovider='${call.request.creditcardprovider}',creditcardnumber='${call.request.creditcardnumber}',creditcardname='${call.request.creditcardname}',creditcardexpiry='${call.request.creditcardexpiry}' WHERE username='${call.request.username}'`);
+            response={"result":true, "message":"Payment details are updated"}
+        }catch(err){
+        console.log("Update payment query failed: " + err);
+        response={"result":false, "message":"Something went wrong. Please try again"}
+    }
+    callback(null, response);
+}
+
+async function updateAccountDetails (call, callback) {
+    let response={};
+    console.log("Update details for" +call.request.username)
+    try{
+            // password verification successful
+            let rows=await query(`UPDATE Customer SET firstname='${call.request.firstname}',lastname='${call.request.lastname}',email='${call.request.email}',phonenumber='${call.request.phonenumber}' WHERE username='${call.request.username}'`);
+            response={"result":true, "message":"Account details are updated"}
+        }catch(err){
+        console.log("Update Account query failed: " + err);
+        response={"result":false, "message":"Something went wrong. Please try again"}
+    }
+    callback(null, response);
 }

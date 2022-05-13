@@ -29,6 +29,8 @@ var session1= {
     resave: false,
     saveUninitialized: true
 }
+let sessionData={ "username":"", "isAdmin":false};
+
 const app = express() 
  var helpers = {};
 /* Public: errorHandler is a middleware that handles your errors
@@ -249,12 +251,20 @@ app.post("/login", function(req, res, next) {
             return;
         }
         if (response) {
+            sessionData.username=response.username;
+            sessionData.isAdmin=response.isAdmin;
             console.log(response);
             res.status(200);
             res.end(JSON.stringify(response));
             return;
         }
     });
+});
+
+app.post("/logout", function(req, res, next) {
+    console.log("logging out Customer: " + JSON.stringify(req.body));
+    sessionData.username="";
+    sessionData.isAdmin=false;
 });
 
 // Create Customer - TO BE USED FOR TESTING ONLY (for now)
@@ -282,6 +292,95 @@ app.post("/register", function(req, res, next) {
     });
 });
 
+// reset password
+app.post("/resetpassword", function(req, res, next) {
+    console.log("resetting password: " + JSON.stringify(req.body));
+    const username=req.body.username?req.body.username:sessionData.username;
+    userClient.resetPassword({"username":username,
+                        "oldpassword":req.body.oldpassword,
+                        "newpassword":req.body.newpassword,
+    },(err,response)=>{
+        if (err !== null ) {
+            console.log("error "+JSON.stringify(err));
+            res.status(500);
+            res.end(JSON.stringify(false));
+            return;
+        }
+        if (response) {
+            console.log(response);
+            res.status(200);
+            res.end(JSON.stringify(response));
+            return;
+        }
+    });
+});
+
+// reset password
+app.post("/updatepayment", function(req, res, next) {
+    console.log("Update Payment: " + JSON.stringify(req.body));
+    userClient.updatePayment({"username":sessionData.username,
+                        "creditcardprovider":req.body.creditcardprovider,
+                        "creditcardnumber":req.body.creditcardnumber,
+                        "creditcardname":req.body.creditcardname,
+                        "creditcardexpiry":req.body.creditcardexpiry,
+    },(err,response)=>{
+        if (err !== null ) {
+            console.log("error "+JSON.stringify(err));
+            res.status(500);
+            res.end(JSON.stringify(false));
+            return;
+        }
+        if (response) {
+            console.log(response);
+            res.status(200);
+            res.end(JSON.stringify(response));
+            return;
+        }
+    });
+});
+app.get("/accountdetails", function (req, res, next) {
+    console.log("Request received: " + req.url );
+    const username=req.body.username?req.body.username:sessionData.username;
+    userClient.getAccountDetails({"username":username},(err, response) => {
+        console.log("Response received");
+            if(response){
+                console.log("user data returned " + JSON.stringify(response));
+                res.writeHeader(200);
+                res.write(JSON.stringify(response));
+                res.end();
+            }
+            if(err){
+                console.log("user account data fetch failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(err));
+                res.end();
+            }
+    });
+});
+app.post("/accountdetails", function (req, res, next) {
+    console.log("Request received: " + req.url );
+    const username=req.body.username?req.body.username:sessionData.username;
+    userClient.updateAccountDetails({"username":username,
+                                     "firstname":req.body.firstname,
+                                     "lastname":req.body.lastname,
+                                     "email":req.body.email,
+                                     "phonenumber":req.body.phonenumber
+        },(err, response) => {
+        console.log("Response received");
+            if(response){
+                console.log("user data updated " + JSON.stringify(response));
+                res.writeHeader(200);
+                res.write(JSON.stringify(response));
+                res.end();
+            }
+            if(err){
+                console.log("user account data update failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(err));
+                res.end();
+            }
+    });
+});
 
 app.listen(PORT, function(error){ 
 	if(error) throw error 
