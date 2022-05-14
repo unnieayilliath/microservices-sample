@@ -10,7 +10,7 @@ function getUsers() {
         }
     });
 }
-var Userheaders = ["User Name", "Firstname", "Lastname", "Email", "isAdmin"];
+var Userheaders = ["Customer ID","User Name", "Firstname", "Lastname", "Email", "isAdmin","",""];
 function displayUsers(users) {
     var html = `<h1> Users </h1>
                 <table border=1 width=100%>
@@ -22,12 +22,14 @@ function displayUsers(users) {
     html += "</tr>";
     for (i = 0; i < users.length; i++) {
         html += `<tr>
+                <td>${users[i].customerID}</td>
                 <td>${users[i].username}</td>
                 <td>${users[i].firstname}</td>
                 <td>${users[i].lastname}</td>
                 <td>${users[i].email}</td>
                 <td>${users[i].isAdmin}</td>
                 <td><button onclick="editUser('${users[i].username}')">Edit</button></td>
+                <td><button onclick="viewOrders('${users[i].customerID}','${users[i].firstname} ${users[i].lastname}')">View Orders</button></td>
                 <td></td>
                 </tr>`;
     }
@@ -39,4 +41,7 @@ function displayUsers(users) {
 
 function editUser(username){
     window.open(`myaccount.html?user=${username}`,"_blank");
+}
+function viewOrders(customerID,username){
+    window.open(`orders.html?customerID=${customerID}&user=${username}`,"_blank");
 }

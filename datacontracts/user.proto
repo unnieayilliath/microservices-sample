@@ -80,6 +80,7 @@ message AddAddressRequest{
 }
 
 message UserDetail{
+    string customerID=6;
     string username=1;
     string firstname=2;
     string lastname=3;

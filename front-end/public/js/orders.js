@@ -12,7 +12,7 @@ function getOrders() {
 }
 var Orderheaders = ["Order ID","Sale Date","No. Of Products", "Total Price","Status",""];
 function displayOrders(orders) {
-    var html = `<h1> Orders </h1>
+    var html = `<h1> Orders by ${getCustomerName()} </h1>
                 <table border=1 width=100%>
                 <tr style="font-size: 20px;" >`;
     var i;
@@ -36,6 +36,14 @@ function displayOrders(orders) {
             </table>
             <br>`;
     document.getElementById("divOrders").innerHTML = html;
+}
+function getCustomerName(){
+    let user=getParameterByName("user");
+    if(user){
+        return user;
+    }else{
+        return getCookie("user");
+    }
 }
 
 function cancelOrder(orderId){
