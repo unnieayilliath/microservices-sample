@@ -1,0 +1,35 @@
+syntax = "proto3";
+package orderPackage;
+service Order {
+    //unary
+    rpc createOrder(CreateOrderRequest) returns (OrderActionResponse);
+    rpc readOrders(ReadOrdersRequest) returns (ReadOrdersResponse);
+}
+message nothing {}
+
+message CreateOrderRequest {
+    int32 customerID = 1;
+    float total = 2;
+    repeated OrderDetails items=3;
+}
+message OrderDetails {
+    int32 productID = 1;
+    int32 quantity = 2;
+}
+message ReadOrdersRequest {
+    int32 customerID = 1;
+}
+message ReadOrdersResponse {
+    repeated OrderItem orders=1;
+}
+
+message OrderItem{
+    int32 orderID = 1;
+    int32 customerID = 2;
+    string saledate=3;
+    float total=4;
+}
+message OrderActionResponse {
+    bool result=1;
+    string message=2;
+}

@@ -32,21 +32,3 @@ INSERT INTO Customer (username, password, firstname, lastname, email, isAdmin)
  VALUES ('Unnie', 'Pass123', 'Unnie','Ayilliath','unnie@unnie.com',true);
 
 
-
-CREATE TABLE Orders (
-    orderID INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    customerID INT UNSIGNED  NOT NULL,
-    saledate VARCHAR(40) NOT NULL,
-    PRIMARY KEY  (orderID)
-
-);
-
-CREATE TABLE OrderDetails (
-    orderdetailsID INT UNSIGNED  NOT NULL AUTO_INCREMENT,
-    orderID INT UNSIGNED  NOT NULL,
-    productID INT UNSIGNED  NOT NULL,
-    quantity INT UNSIGNED  NOT NULL,
-    PRIMARY KEY  (orderdetailsID)
-
-);
-

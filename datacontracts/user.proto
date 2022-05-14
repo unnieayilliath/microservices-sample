@@ -44,7 +44,7 @@ message UserAccountDetailsRequest {
     string username=2;
 }
 message UserLoginResponse {
-    int32 id=1;
+    int32 customerID=1;
     string username=2;
     string firstname=3;
     string lastname=4;

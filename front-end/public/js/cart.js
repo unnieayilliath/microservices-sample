@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     // on page load existing cart data
     getCart();
 });
@@ -40,7 +39,7 @@ function displayCart(cart, name) {
     out += '<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="5"><b>'+total+'</b></td></tr></tfoot>';
     out += '</table>';
     out += '<br>';
-    out += '<button style="background:#ff6900;color:#fff;padding:5px;border:none;font-size:large" onclick="checkout()">Checkout</button><br>';
+    out += '<button style="background:#ff6900;color:#fff;padding:5px;border:none;font-size:large;cursor:pointer" onclick="checkout()">Checkout</button><br>';
     out+='<div id="cartmessage"></div>';
     document.getElementById(name).innerHTML = out;
 }
@@ -67,13 +66,15 @@ function deleteCartItem(cartId) {
 }
 
 function checkout() {
-    console.log("check out called");
-    $.post(
+    let proceed = confirm("Are you sure to buy these products?");
+    if(proceed){
+        $.post(
             "/checkout",
             {
             },
             function (data) {
                 $('#cartmessage').html(data);
             }
-    );
+         );
+    }
 }

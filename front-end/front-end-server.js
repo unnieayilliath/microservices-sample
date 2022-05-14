@@ -22,6 +22,12 @@ const userPackageDef = protoLoader.loadSync("../datacontracts/user.proto", {});
 const usergRPCObject = grpc.loadPackageDefinition(userPackageDef);
 const userPackage = usergRPCObject.userPackage;
 const userClient = new userPackage.User("0.0.0.0:1002",grpc.credentials.createInsecure());
+
+// Order service
+const orderPackageDef = protoLoader.loadSync("../datacontracts/order.proto", {});
+const ordergRPCObject = grpc.loadPackageDefinition(orderPackageDef);
+const orderPackage = ordergRPCObject.orderPackage;
+const orderClient = new orderPackage.Order("0.0.0.0:1003",grpc.credentials.createInsecure());
 var cookie_name = "logged_in"
 var session1= {
     name: 'md.sid',
@@ -29,7 +35,7 @@ var session1= {
     resave: false,
     saveUninitialized: true
 }
-let sessionData={ "username":"", "isAdmin":false};
+let sessionData={ "username":"", "isAdmin":false,"customerID":0};
 
 const app = express() 
  var helpers = {};
@@ -253,6 +259,7 @@ app.post("/login", function(req, res, next) {
         if (response) {
             sessionData.username=response.username;
             sessionData.isAdmin=response.isAdmin;
+            sessionData.customerID=response.customerID;
             console.log(response);
             res.status(200);
             res.end(JSON.stringify(response));
@@ -404,6 +411,46 @@ app.post("/accountdetails", function (req, res, next) {
             }
             if(err){
                 console.log("user account data update failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(err));
+                res.end();
+            }
+    });
+});
+
+app.post("/checkout", function (req, res, next) {
+    console.log("Check out cart: " + req.url );
+    cartClient.readCart({"id":1},(err, response) => {
+            if(response){
+                console.log("Cart data returned " + JSON.stringify(response));
+                if(response.items){
+                    let total=0;
+                    for(i=0;i<response.items.length;i++){
+                        total+=response.items[i].price* response.items[i].quantity;
+                    }
+                    console.log(JSON.stringify(response.items));
+                    orderClient.createOrder({"customerID":sessionData.customerID,
+                              "total":total,
+                              "items":response.items
+                            },(err, response) => {
+                                console.log("Response received");
+                                if(response){
+                                    console.log("Checkout completed " + JSON.stringify(response));
+                                    res.writeHeader(200);
+                                    res.write(JSON.stringify(response));
+                                    res.end();
+                                }
+                                if(err){
+                                    console.log("Checkout failed: " + JSON.stringify(err));
+                                    res.writeHeader(401);
+                                    res.write(JSON.stringify(err));
+                                    res.end();
+                                }
+                    });
+                }
+            }
+            if(err){
+                console.log("Cart data fetch failed: " + JSON.stringify(err));
                 res.writeHeader(401);
                 res.write(JSON.stringify(err));
                 res.end();
