@@ -21,7 +21,7 @@
     </nav>
     <article>
         <div id="myaccount">
-            <h1>My Account</h1>
+            <h1 id="pageHeader"></h1>
             <span id="spanUserDisplayname"></span>
             <table>
                 <tr>
@@ -51,7 +51,11 @@
                         </div>
                     </td>
                     <td style="vertical-align:top">
-                        <div id="changePassword">
+                        <div id="divGeneratePassword" style="display:none">
+                            <span id="spanTempPassword"></span><br>
+                            <input type="submit" class="btn" onclick="generateTemporaryPassword()" value="Generate Temporary Password">
+                        </div>
+                        <div id="divChangePassword">
                             <h3>Reset Password</h3>
                             <form id="changePasswordForm" action="">
                                 Enter Current Password:<span style="color: red">*</span><br>

@@ -106,11 +106,12 @@ function ParseFormData(formName) {
 
 function getAccountDetails() {
     const username=getParameterByName("user");
-    alert(username);
     let querystring={};
     if(username && username!=""){
         querystring=`?username=${username}`;
         global_username=username;
+        $("#divGeneratePassword").show();
+        $("#divChangePassword").hide();
     }
     $.ajax({
         dataType: "json",
@@ -124,10 +125,33 @@ function getAccountDetails() {
         }
     });
 }
-
+function generateTemporaryPassword(){
+    let formData={}
+    if (global_username != "") {
+        formData.username=global_username;
+        $.ajax
+        ({
+            type: "POST",
+            url: "/temporarypassword",
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function (data) {
+                const response=JSON.parse(data);
+                if(response.result){
+                    $("#spanTempPassword").text(`Temporary Password is: ${response.message} `)
+                }else{
+                    alert(response.message);
+                }
+            }
+        });
+    }else{
+        alert("This action is not available.");
+    }
+  
+}
 function displayAccountDetails(data){
-
-    const html=`<h3>${data.username}</h3>
+    $("#pageHeader").html(data.username);
+    const html=`
     <table>
         <tr>
             <td>Firstname</td>

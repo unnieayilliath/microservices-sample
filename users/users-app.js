@@ -15,7 +15,8 @@ server.addService(userPackage.User.service,
         "resetPassword" : resetPassword,
         "getAccountDetails" : getAccountDetails,
         "updateAccountDetails": updateAccountDetails,
-        "readUsers":returnUsers
+        "readUsers":returnUsers,
+        "generateTemporaryPassword":generateTemporaryPassword
     });
 
 server.start();
@@ -158,6 +159,20 @@ async function updateAccountDetails (call, callback) {
             response={"result":true, "message":"Account details are updated"}
         }catch(err){
         console.log("Update Account query failed: " + err);
+        response={"result":false, "message":"Something went wrong. Please try again"}
+    }
+    callback(null, response);
+}
+async function generateTemporaryPassword (call, callback) {
+    let response={};
+    console.log("Generating temporary password for" +call.request.username)
+    try{
+            const temporaryPassword=`Welcome@${Math.floor(Math.random()*90000) + 10000}`;
+            // password verification successful
+            rows=await query(`UPDATE Customer SET password='${temporaryPassword}' WHERE username='${call.request.username}'`);
+            response={"result":true, "message":temporaryPassword}
+    }catch(err){
+        console.log("Password generation failed: " + err);
         response={"result":false, "message":"Something went wrong. Please try again"}
     }
     callback(null, response);

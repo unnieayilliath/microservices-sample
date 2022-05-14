@@ -295,10 +295,10 @@ app.post("/register", function(req, res, next) {
 // reset password
 app.post("/resetpassword", function(req, res, next) {
     console.log("resetting password: " + JSON.stringify(req.body));
-    const username=req.body.username?req.body.username:sessionData.username;
+    const username=sessionData.username;
     userClient.resetPassword({"username":username,
                         "oldpassword":req.body.oldpassword,
-                        "newpassword":req.body.newpassword,
+                        "newpassword":req.body.newpassword
     },(err,response)=>{
         if (err !== null ) {
             console.log("error "+JSON.stringify(err));
@@ -313,6 +313,34 @@ app.post("/resetpassword", function(req, res, next) {
             return;
         }
     });
+});
+
+// reset password
+app.post("/temporarypassword", function(req, res, next) {
+    console.log("Generate temporary password: " + JSON.stringify(req.body));
+    const username=req.body.username;
+    if(sessionData.isAdmin){
+        userClient.generateTemporaryPassword({"username":username,
+    },(err,response)=>{
+        if (err !== null ) {
+            console.log("error "+JSON.stringify(err));
+            res.status(500);
+            res.end(JSON.stringify(false));
+            return;
+        }
+        if (response) {
+            console.log(response);
+            res.status(200);
+            res.end(JSON.stringify(response));
+            return;
+        }
+    });
+    }else{
+        const response={"result":false,"message":"You are not authorised for this action."}
+        console.log(response);
+        res.status(200);
+        res.end(JSON.stringify(response));
+    }
 });
 
 // reset password

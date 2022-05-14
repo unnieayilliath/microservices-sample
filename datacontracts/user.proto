@@ -8,6 +8,7 @@ service User {
     rpc getAccountDetails(UserAccountDetailsRequest) returns (UserAccountDetailsResponse);
     rpc updateAccountDetails(UserAccountDetailsUpdateRequest) returns (UserActionResponse);
     rpc readUsers(nothing)returns (UsersReadResponse);
+    rpc generateTemporaryPassword(UserGenerateTemporaryPassword) returns (UserActionResponse);
 }
 message nothing {}
 
@@ -83,5 +84,8 @@ message UserDetail{
 }
 message UsersReadResponse{
     repeated UserDetail users = 1;
+}
 
+message UserGenerateTemporaryPassword{
+    string username=1;
 }
