@@ -32,13 +32,11 @@ async function createOrder(call,callback) {
         var mySQLInsertQuery = "INSERT INTO OrderDetails (orderID, productID, quantity) VALUES ? ";
         let orderDetails = [];
         if(call.request.items){
-            console.log("here")
             for(i=0;i<call.request.items.length;i++)
             {
                 orderDetails.push([orderId,call.request.items[i].productID,call.request.items[i].quantity]);
             }
         }
-        console.log(orderDetails.length);
         const bulkinsert=await query(mySQLInsertQuery,[orderDetails]);
         response={"result":true,"message":"Order is created successfully!"}
     }catch(err){

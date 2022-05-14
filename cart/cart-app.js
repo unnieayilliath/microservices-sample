@@ -9,11 +9,12 @@ server.addService(cartPackage.Cart.service,
     {
         "addCartItem": addToCart,
         "readCart" : returnCart,
-        "deleteCartItem" : removeFromCart
+        "deleteCartItem" : removeFromCart,
+        "clear":clearCart
     });
 server.start();
 
-const cartTable = []
+let cartTable = []
 // this method adds an item to the cart ( an in memory array in this sample)
 function addToCart (call, callback) {
     // find the product in the cart
@@ -43,6 +44,11 @@ function addToCart (call, callback) {
 function returnCart(call, callback) {
     console.log("Received request");
     callback(null, {items:cartTable});
+}
+function clearCart(call, callback) {
+    console.log("Clearing cart");
+    cartTable=[];
+    callback(null, {"result":true});
 }
 
 // this method adds an item to the cart ( an in memory array in this sample)

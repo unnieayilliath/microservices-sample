@@ -1,3 +1,4 @@
+
 $(document).ready(function () {
     // on page load existing cart data
     getCart();
@@ -72,8 +73,14 @@ function checkout() {
             "/checkout",
             {
             },
-            function (data) {
-                $('#cartmessage').html(data);
+            function (response) {
+                const data=JSON.parse(response);
+                if(data.result){
+                    alert("Check out is complete and order is placed.");
+                    window.location.assign("orders.html");
+                }else{
+                    alert("Something went wrong!");
+                }
             }
          );
     }

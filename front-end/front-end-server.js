@@ -435,10 +435,12 @@ app.post("/checkout", function (req, res, next) {
                             },(err, response) => {
                                 console.log("Response received");
                                 if(response){
-                                    console.log("Checkout completed " + JSON.stringify(response));
-                                    res.writeHeader(200);
-                                    res.write(JSON.stringify(response));
-                                    res.end();
+                                    cartClient.clear({"id":1},(err, response) => {
+                                        console.log("Checkout completed " + JSON.stringify(response));
+                                        res.writeHeader(200);
+                                        res.write(JSON.stringify(response));
+                                        res.end();
+                                    });
                                 }
                                 if(err){
                                     console.log("Checkout failed: " + JSON.stringify(err));
