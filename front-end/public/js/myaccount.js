@@ -1,23 +1,11 @@
+let global_username="";
 $(document).ready(function () {
     // on page load existing cart data
     getAccountDetails();
 
     $('#updateDetailsForm').on("submit",function(event) {
         event.preventDefault();
-        var o={};
-        var a = $('#updateDetailsForm').serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-       
-        var fd =JSON.stringify(o);
+        var fd = ParseFormData("updateDetailsForm");
         $.ajax
         ({
             type: "POST",
@@ -39,20 +27,7 @@ $(document).ready(function () {
 
     $('#changePaymentForm').on("submit",function(event) {
         event.preventDefault();
-        var o={};
-        var a = $('#changePaymentForm').serializeArray();
-        $.each(a, function() {
-            if (o[this.name] !== undefined) {
-                if (!o[this.name].push) {
-                    o[this.name] = [o[this.name]];
-                }
-                o[this.name].push(this.value || '');
-            } else {
-                o[this.name] = this.value || '';
-            }
-        });
-       
-        var fd =JSON.stringify(o);
+        var fd = ParseFormData("changePaymentForm");
         $.ajax
         ({
             type: "POST",
@@ -86,6 +61,9 @@ $(document).ready(function () {
             "oldpassword":document.getElementById("oldPassword").value,
             "newpassword":password1,
         }
+        if (global_username != "") {
+            formData.username=global_username
+        }
         $.ajax
         ({
             type: "POST",
@@ -105,10 +83,38 @@ $(document).ready(function () {
     });
 });
 let accountData={};
+function ParseFormData(formName) {
+    var o={};
+    if (global_username != "") {
+        o["username"] = global_username;
+    }
+    var a = $(`#${formName}`).serializeArray();
+    $.each(a, function () {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+
+    var fd = JSON.stringify(o);
+    return fd;
+}
+
 function getAccountDetails() {
+    const username=getParameterByName("user");
+    alert(username);
+    let querystring={};
+    if(username && username!=""){
+        querystring=`?username=${username}`;
+        global_username=username;
+    }
     $.ajax({
         dataType: "json",
-        url: "/accountdetails",
+        url: `/accountdetails${querystring}`,
         success: function (data) {
             if(data){
                 accountData=data;

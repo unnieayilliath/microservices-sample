@@ -318,7 +318,8 @@ app.post("/resetpassword", function(req, res, next) {
 // reset password
 app.post("/updatepayment", function(req, res, next) {
     console.log("Update Payment: " + JSON.stringify(req.body));
-    userClient.updatePayment({"username":sessionData.username,
+    const username=req.body.username?req.body.username:sessionData.username;
+    userClient.updatePayment({"username":username,
                         "creditcardprovider":req.body.creditcardprovider,
                         "creditcardnumber":req.body.creditcardnumber,
                         "creditcardname":req.body.creditcardname,
@@ -340,7 +341,7 @@ app.post("/updatepayment", function(req, res, next) {
 });
 app.get("/accountdetails", function (req, res, next) {
     console.log("Request received: " + req.url );
-    const username=req.body.username?req.body.username:sessionData.username;
+    const username=req.query.username?req.query.username:sessionData.username;
     userClient.getAccountDetails({"username":username},(err, response) => {
         console.log("Response received");
             if(response){

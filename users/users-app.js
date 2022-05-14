@@ -104,7 +104,10 @@ async function getAccountDetails (call, callback) {
         const rows=await query(`SELECT * FROM Customer where username='${call.request.username}'`);
         if(rows!=null && rows.length>0){
             user=rows[0];
-            user.creditcardendingnumber=rows[0].creditcardnumber.substring(rows[0].creditcardnumber.length-4,rows[0].creditcardnumber.length);
+            if(rows[0].creditcardnumber)
+            {
+                user.creditcardendingnumber=rows[0].creditcardnumber.substring(rows[0].creditcardnumber.length-4,rows[0].creditcardnumber.length);
+            }
         }
     }catch(err){
         console.log("Product read query failed: " + err);
