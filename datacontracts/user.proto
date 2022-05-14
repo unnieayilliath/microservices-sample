@@ -7,6 +7,7 @@ service User {
     rpc resetPassword(ResetPasswordRequest) returns (UserActionResponse);
     rpc getAccountDetails(UserAccountDetailsRequest) returns (UserAccountDetailsResponse);
     rpc updateAccountDetails(UserAccountDetailsUpdateRequest) returns (UserActionResponse);
+    rpc readUsers(nothing)returns (UsersReadResponse);
 }
 message nothing {}
 
@@ -71,4 +72,16 @@ message AddAddressRequest{
     string streetname=2;
     string city=3;
     string country=4;
+}
+
+message UserDetail{
+    string username=1;
+    string firstname=2;
+    string lastname=3;
+    string email=4;
+    bool isAdmin=5;
+}
+message UsersReadResponse{
+    repeated UserDetail users = 1;
+
 }

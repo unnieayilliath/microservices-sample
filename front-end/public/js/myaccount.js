@@ -37,6 +37,42 @@ $(document).ready(function () {
         });
     });
 
+    $('#changePaymentForm').on("submit",function(event) {
+        event.preventDefault();
+        var o={};
+        var a = $('#changePaymentForm').serializeArray();
+        $.each(a, function() {
+            if (o[this.name] !== undefined) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+       
+        var fd =JSON.stringify(o);
+        $.ajax
+        ({
+            type: "POST",
+            url: "/updatepayment",
+            contentType: 'application/json',
+            data: fd,
+            success: function (data) {
+                const response=JSON.parse(data);
+                if(response.result){
+                  alert(response.message);
+                    //redirect user to home page
+                    window.location.reload();
+                }else{
+                    alert(response.message);
+                }
+            }
+        });
+    });
+
+
     // reset password
     $('#changePasswordForm').on("submit",function(event) {
         event.preventDefault();
@@ -77,6 +113,7 @@ function getAccountDetails() {
             if(data){
                 accountData=data;
                 displayAccountDetails(data);
+                displayPaymentDetails(data);
             }
         }
     });
@@ -110,6 +147,29 @@ function displayAccountDetails(data){
     $("#divShowDetails").show();
 }
 
+function displayPaymentDetails(data){
+    let html="<h3>Payment Details</h3>";
+    if(data.creditcardprovider){
+        html+=`
+        <table>
+            <tr>
+                <td>Card Type</td>
+                <td><span>${data.creditcardprovider}</span></td>
+            </tr>
+            <tr>
+                <td>Card Ending:</td>
+                <td><span>${data.creditcardendingnumber}</span></td>
+            </tr>
+        </table>`
+    }else{
+        html+=`Payment method is not entered.`
+    }
+    html+=`<br/><br/><input type="submit" class="btn" onclick="editPaymentDetails()" value="Edit">`;
+    document.getElementById("divShowPayment").innerHTML = html;
+    $("#divShowPayment").show();
+    $("#divChangePayment").hide();
+}
+
 function editAccountDetails(){
         $("#inputfname").val(accountData.firstname);
         $("#inputlname").val(accountData.lastname);
@@ -117,4 +177,8 @@ function editAccountDetails(){
         $("#inputphone").val(accountData.phonenumber);
         $("#divUpdateDetails").show();
         $("#divShowDetails").hide();
+}
+function editPaymentDetails(){
+    $("#divShowPayment").hide();
+    $("#divChangePayment").show();
 }

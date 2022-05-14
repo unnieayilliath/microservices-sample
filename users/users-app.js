@@ -14,7 +14,8 @@ server.addService(userPackage.User.service,
         "updatePayment" : updatePayment,
         "resetPassword" : resetPassword,
         "getAccountDetails" : getAccountDetails,
-        "updateAccountDetails": updateAccountDetails
+        "updateAccountDetails": updateAccountDetails,
+        "readUsers":returnUsers
     });
 
 server.start();
@@ -78,9 +79,8 @@ async function returnUsers(call, callback) {
         users=await query("SELECT * FROM Customer")
     }catch(err){
         console.log("User read query failed: " + err);
-        return false;
     }
-    callback(null, {items:users});
+    callback(null, {users:users});
 }
 // 
 async function login (call, callback) {

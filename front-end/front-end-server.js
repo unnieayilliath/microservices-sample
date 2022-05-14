@@ -382,6 +382,27 @@ app.post("/accountdetails", function (req, res, next) {
     });
 });
 
+app.get("/users", function (req, res, next) {
+    userClient.readUsers({"id":1},(err, response) => {
+        console.log("Response received");
+            if(response){
+                console.log("Users data returned " + JSON.stringify(response));
+                res.writeHeader(200);
+                if(response.users){
+                res.write(JSON.stringify(response.users));
+                }else{
+                res.write(JSON.stringify([]));
+                }
+                res.end();
+            }
+            if(err){
+                console.log("Catalogue data fetch failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(response));
+                res.end();
+            }
+    });
+  });
 app.listen(PORT, function(error){ 
 	if(error) throw error 
 	console.log("Server created Successfully on PORT :", PORT) 
