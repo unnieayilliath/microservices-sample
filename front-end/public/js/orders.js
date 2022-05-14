@@ -23,12 +23,14 @@ function displayOrders(orders) {
     for (i = 0; i < orders.length; i++) {
         html += `<tr>
                 <td>${orders[i].orderID}</td>
-                <td>${orders[i].saledate}</td>
+                <td>${displayDateTime(orders[i].saledate)}</td>
                 <td>${orders[i].productcount}</td>
-                <td>${orders[i].total}</td>
+                <td>${displayPrice(orders[i].total)}</td>
                 <td>${orders[i].status}</td>`;
         if(orders[i].status=="In Progress"){
             html+=`<td><button onclick="cancelOrder('${orders[i].orderID}')">Cancel Order</button></td>`;
+        }else{
+            html+=`<td> </td>`
         }
         html+=`</tr>`;
     }

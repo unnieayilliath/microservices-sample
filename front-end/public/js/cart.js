@@ -26,18 +26,18 @@ function displayCart(cart, name) {
     for (i = 0; i < cart.length; i++) {
         out += "<tr>";
         out += '<td>' + cart[i].name + '</td>';
-        out += '<td>' + cart[i].price + '</td>';
+        out += '<td>' + displayPrice(cart[i].price) + '</td>';
         out += '<td> <img src="';
         out += "images/" + cart[i].image + '" style="width:104px;height:100px;">';
         out += '<td> <button onclick="deleteCartItem(' + cart[i].cartId;
         out1 = ")" + '">Delete</button></td>';
         out += out1;
         out += '<td>' + cart[i].quantity + '</td>';
-        out += '<td>' + cart[i].price* cart[i].quantity + '</td>';
+        out += '<td>' + displayPrice(cart[i].price* cart[i].quantity) + '</td>';
         out += "</tr>";
         total += cart[i].price* cart[i].quantity;
     }
-    out += '<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="5"><b>'+total+'</b></td></tr></tfoot>';
+    out += '<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="5"><b>'+displayPrice(total)+'</b></td></tr></tfoot>';
     out += '</table>';
     out += '<br>';
     out += '<button style="background:#ff6900;color:#fff;padding:5px;border:none;font-size:large;cursor:pointer" onclick="checkout()">Checkout</button><br>';

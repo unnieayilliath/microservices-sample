@@ -30,10 +30,9 @@ function displayUsers(users) {
                 <td>${users[i].isAdmin}</td>
                 <td><button onclick="editUser('${users[i].username}')">Edit</button></td>
                 <td><button onclick="viewOrders('${users[i].customerID}','${users[i].firstname} ${users[i].lastname}')">View Orders</button></td>
-                <td></td>
                 </tr>`;
     }
-    html += `<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="5"><b>${users.length}</b></td></tr></tfoot>
+    html += `<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="8"><b>${users.length}</b></td></tr></tfoot>
             </table>
             <br>`;
     document.getElementById("divCustomers").innerHTML = html;

@@ -47,7 +47,7 @@ function displayProducts(products, name) {
     for (i = 0; i < products.length; i++) {
         out += "<tr>";
         out += '<td>' + products[i].name + '</td>';
-        out += '<td>' + products[i].price + '</td>';
+        out += '<td>' + displayPrice(products[i].price) + '</td>';
         out += '<td> <img src="';
         out += "images/" + products[i].image + '" style="width:104px;height:100px;">';
         out += '<td>' + 'quantity <input type="text" value="1" name="';
