@@ -16,7 +16,8 @@ server.addService(userPackage.User.service,
         "getAccountDetails" : getAccountDetails,
         "updateAccountDetails": updateAccountDetails,
         "readUsers":returnUsers,
-        "generateTemporaryPassword":generateTemporaryPassword
+        "generateTemporaryPassword":generateTemporaryPassword,
+        "getUser":getUser
     });
 
 server.start();
@@ -71,6 +72,22 @@ async function checkUserExists(username) {
         console.log("Registration validation query failed: " + err);
         return false;
     }
+}
+
+async function getUser(call, callback) {
+    let response={};
+    try{
+        const rows=await query(`SELECT * FROM Customer where username='${call.request.username}'`);
+        if(rows != null && rows.length > 0)
+        {
+            response=rows[0];
+        }
+    }
+    catch(err){
+        console.log("Registration validation query failed: " + err);
+        return false;
+    }
+    callback(null, response);
 }
 // this method streams cart items back to client
 async function returnUsers(call, callback) {

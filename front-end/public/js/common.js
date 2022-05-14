@@ -10,7 +10,7 @@ const nav=[
     {"text":"Show Cart","page":"cart.html","AdminOnly":false,"display":"always"},
     {"text":"Logout","page":"","AdminOnly":false,"display":"authenticated"},
     {"text":"My Account","page":"myaccount.html","AdminOnly":false,"display":"authenticated"},
-    {"text":"My Orders","page":"newpmyorders.html","AdminOnly":false,"display":"authenticated"},
+    {"text":"My Orders","page":"orders.html","AdminOnly":false,"display":"authenticated"},
     {"text":"Show Customers","page":"customers.html","AdminOnly":true,"display":"authenticated"},
     {"text":"New Product","page":"newproduct.html","AdminOnly":true,"display":"authenticated"},
     {"text":"Login","page":"login.html","AdminOnly":false,"display":"anonymous"},

@@ -9,6 +9,7 @@ service User {
     rpc updateAccountDetails(UserAccountDetailsUpdateRequest) returns (UserActionResponse);
     rpc readUsers(nothing)returns (UsersReadResponse);
     rpc generateTemporaryPassword(UserGenerateTemporaryPassword) returns (UserActionResponse);
+    rpc getUser(GetUserRequest) returns (UserLoginResponse);
 }
 message nothing {}
 
@@ -23,6 +24,9 @@ message UserRegisterRequest {
 message UserLoginRequest {
     string username=2;
     string password=3;
+}
+message GetUserRequest {
+    string username=2;
 }
 message UserAccountDetailsResponse {
     string username=2;

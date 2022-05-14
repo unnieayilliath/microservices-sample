@@ -6,6 +6,7 @@ CREATE TABLE Orders (
     customerID INT UNSIGNED  NOT NULL,
     saledate VARCHAR(40) NOT NULL,
     total FLOAT NOT NULL,
+    status varchar(20) NOT NULL,
     PRIMARY KEY  (orderID)
 );
 

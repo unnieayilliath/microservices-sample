@@ -4,6 +4,7 @@ service Order {
     //unary
     rpc createOrder(CreateOrderRequest) returns (OrderActionResponse);
     rpc readOrders(ReadOrdersRequest) returns (ReadOrdersResponse);
+    rpc cancelOrder(OrderCancelRequest) returns (OrderActionResponse);
 }
 message nothing {}
 
@@ -28,8 +29,13 @@ message OrderItem{
     int32 customerID = 2;
     string saledate=3;
     float total=4;
+    int32 productcount=5;
+    string status=6;
 }
 message OrderActionResponse {
     bool result=1;
     string message=2;
+}
+message OrderCancelRequest {
+    int32 orderID = 1;
 }

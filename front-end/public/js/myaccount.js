@@ -106,7 +106,7 @@ function ParseFormData(formName) {
 
 function getAccountDetails() {
     const username=getParameterByName("user");
-    let querystring={};
+    let querystring="";
     if(username && username!=""){
         querystring=`?username=${username}`;
         global_username=username;

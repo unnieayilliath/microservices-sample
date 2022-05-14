@@ -417,7 +417,24 @@ app.post("/accountdetails", function (req, res, next) {
             }
     });
 });
-
+app.post("/cancelorder", function (req, res, next) {
+    console.log("Request received: " + req.url );
+    orderClient.cancelOrder({"orderID":req.body.orderID},(err, response) => {
+        console.log("Response received");
+            if(response){
+                console.log("Order cancelled" + JSON.stringify(response));
+                res.writeHeader(200);
+                res.write(JSON.stringify(response));
+                res.end();
+            }
+            if(err){
+                console.log("Order cancel failed: " + JSON.stringify(err));
+                res.writeHeader(401);
+                res.write(JSON.stringify(err));
+                res.end();
+            }
+    });
+});
 app.post("/checkout", function (req, res, next) {
     console.log("Check out cart: " + req.url );
     cartClient.readCart({"id":1},(err, response) => {
@@ -479,6 +496,40 @@ app.get("/users", function (req, res, next) {
                 res.write(JSON.stringify(response));
                 res.end();
             }
+    });
+  });
+
+  app.get("/orders", function (req, res, next) {
+    const username=req.body.username?req.body.username:sessionData.username;
+    userClient.getUser({"username":username},(err, response)=>{
+        if(response && response.customerID){
+            // get customer id of user
+            orderClient.readOrders({"customerID":response.customerID},(err, response) => {
+                console.log("Response received");
+                    if(response ){
+                        console.log("Orders data returned " + JSON.stringify(response));
+                        res.writeHeader(200);
+                        if(response.orders){
+                        res.write(JSON.stringify(response.orders));
+                        }else{
+                        res.write(JSON.stringify([]));
+                        }
+                        res.end();
+                    }
+                    if(err){
+                        console.log("Catalogue data fetch failed: " + JSON.stringify(err));
+                        res.writeHeader(401);
+                        res.write(JSON.stringify(response));
+                        res.end();
+                    }
+            });
+        }
+        if(err){
+            console.log("Customer ID fetch failed: " + JSON.stringify(err));
+            res.writeHeader(401);
+            res.write(JSON.stringify(response));
+            res.end();
+        }
     });
   });
 app.listen(PORT, function(error){ 
