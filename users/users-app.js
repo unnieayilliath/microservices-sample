@@ -22,8 +22,7 @@ server.addService(userPackage.User.service,
 
 server.start();
 var db = mysql.createConnection({
-    host:     'users-db',
-    port:'3307',
+    host:     'backend-db',
     user:     'root',
     password: '12345678',
     database: 'customerdb'
