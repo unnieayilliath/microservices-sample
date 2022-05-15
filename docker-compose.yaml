@@ -25,3 +25,29 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3306:3306"
+  users-app:
+    container_name: users-app
+    build:
+      context: ./users
+      dockerfile: Dockerfile
+  users-db:
+    container_name: users-db
+    command: --default-authentication-plugin=mysql_native_password
+    build:
+      context: ./database/usersdb
+      dockerfile: Dockerfile
+    ports:
+      - "3307:3307"
+  orders-app:
+    container_name: orders-app
+    build:
+      context: ./orders
+      dockerfile: Dockerfile
+  orders-db:
+    container_name: orders-db
+    command: --default-authentication-plugin=mysql_native_password
+    build:
+      context: ./database/ordersdb
+      dockerfile: Dockerfile
+    ports:
+      - "3308:3308"

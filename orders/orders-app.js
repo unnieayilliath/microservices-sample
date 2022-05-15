@@ -16,7 +16,8 @@ server.addService(orderPackage.Order.service,
 
 server.start();
 var db = mysql.createConnection({
-    host:     'localhost',
+    host:     'orders-db',
+    port:'3308',
     user:     'root',
     password: 'password',
     database: 'orderdb'

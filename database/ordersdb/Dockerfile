@@ -5,4 +5,4 @@ ENV MYSQL_ROOT_PASSWORD password
 # All scripts in docker-entrypoint-initdb.d/ are automatically
 # executed during container startup
 COPY ./ordersdb.sql /docker-entrypoint-initdb.d/
-EXPOSE 3306
+EXPOSE 3308
