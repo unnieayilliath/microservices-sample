@@ -6,7 +6,7 @@ const packageDef = protoLoader.loadSync("../datacontracts/user.proto", {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
 const userPackage = grpcObject.userPackage;
 const server = new grpc.Server();
-server.bind("0.0.0.0:1002", grpc.ServerCredentials.createInsecure());
+server.bind("0.0.0.0:1003", grpc.ServerCredentials.createInsecure());
 server.addService(userPackage.User.service,
     {
         "register": register,

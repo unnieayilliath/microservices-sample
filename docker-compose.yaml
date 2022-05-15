@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  front-end:
+    container_name: front-end
+    build:
+      context: ./front-end
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+  cart-app:
+    container_name: cart-app
+    build:
+      context: ./cart
+      dockerfile: Dockerfile
+  catalogue-app:
+    container_name: catalogue-app
+    build:
+      context: ./catalogue
+      dockerfile: Dockerfile
+  catalogue-db:
+    container_name: catalogue-db
+    command: --default-authentication-plugin=mysql_native_password
+    build:
+      context: ./database/cataloguedb
+      dockerfile: Dockerfile
+    ports:
+      - "3306:3306"

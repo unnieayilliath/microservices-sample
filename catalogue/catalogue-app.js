@@ -16,7 +16,7 @@ server.addService(cataloguePackage.Catalogue.service,
 
 server.start();
 var db = mysql.createConnection({
-    host:     'localhost',
+    host:     'catalogue-db',
     user:     'root',
     password: 'password',
     database: 'cataloguedb'
