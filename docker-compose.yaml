@@ -19,7 +19,6 @@ services:
       dockerfile: Dockerfile
   catalogue-db:
     container_name: catalogue-db
-    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/cataloguedb
       dockerfile: Dockerfile
@@ -32,7 +31,6 @@ services:
       dockerfile: Dockerfile
   users-db:
     container_name: users-db
-    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/usersdb
       dockerfile: Dockerfile
@@ -45,7 +43,6 @@ services:
       dockerfile: Dockerfile
   orders-db:
     container_name: orders-db
-    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/ordersdb
       dockerfile: Dockerfile
