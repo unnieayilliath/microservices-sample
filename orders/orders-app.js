@@ -6,7 +6,7 @@ const packageDef = protoLoader.loadSync("../datacontracts/order.proto", {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
 const orderPackage = grpcObject.orderPackage;
 const server = new grpc.Server();
-server.bind("0.0.0.0:1003", grpc.ServerCredentials.createInsecure());
+server.bind("0.0.0.0:1004", grpc.ServerCredentials.createInsecure());
 server.addService(orderPackage.Order.service,
     {
         "createOrder": createOrder,

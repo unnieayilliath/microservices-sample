@@ -4,7 +4,7 @@ const packageDef = protoLoader.loadSync("../datacontracts/cart.proto", {});
 const grpcObject = grpc.loadPackageDefinition(packageDef);
 const cartPackage = grpcObject.cartPackage;
 const server = new grpc.Server();
-server.bind("0.0.0.0:1000", grpc.ServerCredentials.createInsecure());
+server.bind("0.0.0.0:1002", grpc.ServerCredentials.createInsecure());
 server.addService(cartPackage.Cart.service,
     {
         "addCartItem": addToCart,

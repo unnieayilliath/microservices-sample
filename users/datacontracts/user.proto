@@ -1,0 +1,96 @@
+syntax = "proto3";
+package userPackage;
+service User {
+    rpc register(UserRegisterRequest) returns (UserActionResponse);
+    rpc login(UserLoginRequest) returns (UserLoginResponse);
+    rpc updatePayment(UpdatePaymentMethodRequest) returns (UserActionResponse);
+    rpc resetPassword(ResetPasswordRequest) returns (UserActionResponse);
+    rpc getAccountDetails(UserAccountDetailsRequest) returns (UserAccountDetailsResponse);
+    rpc updateAccountDetails(UserAccountDetailsUpdateRequest) returns (UserActionResponse);
+    rpc readUsers(nothing)returns (UsersReadResponse);
+    rpc generateTemporaryPassword(UserGenerateTemporaryPassword) returns (UserActionResponse);
+    rpc getUser(GetUserRequest) returns (UserLoginResponse);
+}
+message nothing {}
+
+message UserRegisterRequest {
+    string username=2;
+    string password=3;
+    string firstname=4;
+    string lastname=5;
+    string email=6;
+    string phonenumber=7;
+}
+message UserLoginRequest {
+    string username=2;
+    string password=3;
+}
+message GetUserRequest {
+    string username=2;
+}
+message UserAccountDetailsResponse {
+    string username=2;
+    string firstname=3;
+    string lastname=4;
+    string email=8;
+    string phonenumber=5;
+    string creditcardprovider=6;
+    string creditcardendingnumber=7;
+}
+message UserAccountDetailsUpdateRequest {
+    string username=2;
+    string firstname=3;
+    string lastname=4;
+    string email=8;
+    string phonenumber=5;
+}
+message UserAccountDetailsRequest {
+    string username=2;
+}
+message UserLoginResponse {
+    int32 customerID=1;
+    string username=2;
+    string firstname=3;
+    string lastname=4;
+    bool isAdmin=5;
+}
+
+message UserActionResponse {
+    bool result=1;
+    string message=2;
+}
+
+message UpdatePaymentMethodRequest {
+    string username=1;
+    string creditcardprovider=2;
+    string creditcardnumber=3;
+    string creditcardname=4;
+    string creditcardexpiry=5;
+}
+message ResetPasswordRequest{
+    string username=1;
+    string oldpassword=2;
+    string newpassword=3;
+}
+message AddAddressRequest{
+    string username=1;
+    string streetname=2;
+    string city=3;
+    string country=4;
+}
+
+message UserDetail{
+    string customerID=6;
+    string username=1;
+    string firstname=2;
+    string lastname=3;
+    string email=4;
+    bool isAdmin=5;
+}
+message UsersReadResponse{
+    repeated UserDetail users = 1;
+}
+
+message UserGenerateTemporaryPassword{
+    string username=1;
+}

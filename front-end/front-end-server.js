@@ -11,23 +11,23 @@ const protoLoader = require("@grpc/proto-loader");
 const cartPackageDef = protoLoader.loadSync("../datacontracts/cart.proto", {});
 const cartgRPCObject = grpc.loadPackageDefinition(cartPackageDef);
 const cartPackage = cartgRPCObject.cartPackage;
-const cartClient = new cartPackage.Cart("0.0.0.0:1000",grpc.credentials.createInsecure());
+const cartClient = new cartPackage.Cart("cart-app:1002",grpc.credentials.createInsecure());
 // Catalogue service
 const cataloguePackageDef = protoLoader.loadSync("../datacontracts/catalogue.proto", {});
 const cataloguegRPCObject = grpc.loadPackageDefinition(cataloguePackageDef);
 const cataloguePackage = cataloguegRPCObject.cataloguePackage;
-const catalogueClient = new cataloguePackage.Catalogue("0.0.0.0:1001",grpc.credentials.createInsecure());
+const catalogueClient = new cataloguePackage.Catalogue("catalogue-app:1001",grpc.credentials.createInsecure());
 // User service
 const userPackageDef = protoLoader.loadSync("../datacontracts/user.proto", {});
 const usergRPCObject = grpc.loadPackageDefinition(userPackageDef);
 const userPackage = usergRPCObject.userPackage;
-const userClient = new userPackage.User("0.0.0.0:1002",grpc.credentials.createInsecure());
+const userClient = new userPackage.User("users-app:1003",grpc.credentials.createInsecure());
 
 // Order service
 const orderPackageDef = protoLoader.loadSync("../datacontracts/order.proto", {});
 const ordergRPCObject = grpc.loadPackageDefinition(orderPackageDef);
 const orderPackage = ordergRPCObject.orderPackage;
-const orderClient = new orderPackage.Order("0.0.0.0:1003",grpc.credentials.createInsecure());
+const orderClient = new orderPackage.Order("orders-app:1004",grpc.credentials.createInsecure());
 var cookie_name = "logged_in"
 var session1= {
     name: 'md.sid',
