@@ -25,7 +25,7 @@ var db = mysql.createConnection({
     host:     'users-db',
     port:'3307',
     user:     'root',
-    password: 'password',
+    password: '12345678',
     database: 'customerdb'
 });
 // for async/await mysql queries

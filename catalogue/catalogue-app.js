@@ -18,7 +18,7 @@ server.start();
 var db = mysql.createConnection({
     host:     'catalogue-db',
     user:     'root',
-    password: 'password',
+    password: '12345678',
     database: 'cataloguedb'
 });
 // for async/await mysql queries

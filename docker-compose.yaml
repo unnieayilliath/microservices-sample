@@ -19,11 +19,14 @@ services:
       dockerfile: Dockerfile
   catalogue-db:
     container_name: catalogue-db
+    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/cataloguedb
       dockerfile: Dockerfile
     ports:
       - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
   users-app:
     container_name: users-app
     build:
@@ -31,11 +34,14 @@ services:
       dockerfile: Dockerfile
   users-db:
     container_name: users-db
+    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/usersdb
       dockerfile: Dockerfile
     ports:
       - "3307:3307"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
   orders-app:
     container_name: orders-app
     build:
@@ -43,8 +49,11 @@ services:
       dockerfile: Dockerfile
   orders-db:
     container_name: orders-db
+    command: --default-authentication-plugin=mysql_native_password
     build:
       context: ./database/ordersdb
       dockerfile: Dockerfile
     ports:
       - "3308:3308"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678

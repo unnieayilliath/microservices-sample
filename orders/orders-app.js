@@ -19,7 +19,7 @@ var db = mysql.createConnection({
     host:     'orders-db',
     port:'3308',
     user:     'root',
-    password: 'password',
+    password: '12345678',
     database: 'orderdb'
 });
 // for async/await mysql queries
