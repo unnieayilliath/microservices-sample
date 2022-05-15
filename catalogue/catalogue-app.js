@@ -26,30 +26,37 @@ const query = util.promisify(db.query).bind(db);
 // this method adds an item to the cart ( an in memory array in this sample)
 async function addToCatalogue (call, callback) {
     console.log("Create new product");
-    const result=false;
-    const validationResult=await validateProduct(call.request.name);
-    if(validationResult){
+    console.log(JSON.stringify(call.request));
+    let response={};
+    const isExists=await validateProduct(call.request.name);
+    if(!isExists){
         // validation passed
-        result=await InsertNewCatalogueItem(call);
+        response=await InsertNewCatalogueItem(call);
+
+    }else{
+        response={"result":false,"message":"This product already exists!"};
     }
-    callback(null, result);
+    callback(null, response);
 }
 
 async function InsertNewCatalogueItem(call) {
+    let response={};
     try{
         var image = `car${getRandomIntInclusive(1, 6)}.jpeg`;
-        const rows = await query("INSERT INTO Products (name, quantity, price,image) VALUES(?, ?, ?,?)", [call.request.name, call.request.quantity, call.request.price, image]);
-        return true;
+        const rows = await query("INSERT INTO Products (name, quantity, price,image) VALUES (?, ?, ?,?)", [call.request.name, call.request.quantity, call.request.price, image]);
+        response={"result":true,"message":"This product is added to catalogue!"};
     }catch(err){
         console.log(err);
         console.log("Product insert query failed: " + err);
-        return false;
+        response={"result":false,"message":"Operation failed!"};
     }
+    return response;
 }
 
 async function validateProduct(productName) {
     try{
-        const rows=await query(`SELECT * FROM Products where name=${productName}`);
+        const rows=await query(`SELECT * FROM Products where name='${productName}'`);
+        console.log(rows.length)
         return rows != null && rows.length > 0;
     }
     catch(err){

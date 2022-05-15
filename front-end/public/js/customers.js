@@ -29,7 +29,7 @@ function displayUsers(users) {
                 <td>${users[i].email}</td>
                 <td>${users[i].isAdmin}</td>
                 <td><button onclick="editUser('${users[i].username}')">Edit</button></td>
-                <td><button onclick="viewOrders('${users[i].customerID}','${users[i].firstname} ${users[i].lastname}')">View Orders</button></td>
+                <td><button onclick="viewOrders('${users[i].username}','${users[i].firstname} ${users[i].lastname}')">View Orders</button></td>
                 </tr>`;
     }
     html += `<tfoot><tr><td style="background:#000;color:#fff"><b>Total</b></td><td colspan="8"><b>${users.length}</b></td></tr></tfoot>
@@ -42,5 +42,5 @@ function editUser(username){
     window.open(`myaccount.html?user=${username}`,"_blank");
 }
 function viewOrders(customerID,username){
-    window.open(`orders.html?customerID=${customerID}&user=${username}`,"_blank");
+    window.open(`orders.html?username=${customerID}&user=${username}`,"_blank");
 }

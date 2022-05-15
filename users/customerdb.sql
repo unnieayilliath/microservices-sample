@@ -8,7 +8,7 @@ CREATE TABLE Customer (
     firstname VARCHAR(40) NOT NULL,
     lastname VARCHAR(40) NOT NULL,
     email VARCHAR(40) NOT NULL,
-    phonenumber VARCHAR(10),
+    phonenumber VARCHAR(15),
     creditcardprovider varchar(10),
     creditcardnumber VARCHAR(16),
     creditcardname  VARCHAR(16),

@@ -33,11 +33,14 @@ $(document).ready(function () {
             url: "/newProduct",
             contentType: 'application/json',
             data: fd,
-            success: function () {
-                alert("New Product is registered!");
-                getProducts();
-                // reset the form values
-                document.getElementById("newProductForm").reset();
+            success: function (response) {
+                const responseData=JSON.parse(response);
+                if(responseData.result){
+                    alert("New product is added to catalogue!");
+                    window.location.assign("index.html");
+                }else{
+                    document.getElementById("validationMessage").innerHTML=responseData.message;
+                }
             },
             error: function(error){
                 alert("Operation failed!. " + error.responseText);

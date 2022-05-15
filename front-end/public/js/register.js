@@ -8,7 +8,8 @@ $(document).ready(function () {
         const password1=document.getElementById("p1").value;
         const password2=document.getElementById("p2").value;
         if(password1!=password2){
-            document.getElementById("validationMessage").innerHTML="Passwords do not match! Please try again"
+            document.getElementById("validationMessage").innerHTML="Passwords do not match! Please try again";
+            return;
         }
         var a = $('#registerForm').serializeArray();
         $.each(a, function() {

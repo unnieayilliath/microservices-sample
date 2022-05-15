@@ -153,11 +153,11 @@ app.get("/getProducts", function (req, res, next) {
 
   app.post("/newProduct", function(req, res, next) {
     console.log("Posting new Product: " + JSON.stringify(req.body));
-    catalogueClient.addProduct({ "price": item.price,"quantity":qty,"image":"","name":item.name}, (err, response) => {
+    catalogueClient.addProduct({ "price": req.body.price,"quantity":req.body.quantity,"image":"","name":req.body.name}, (err, response) => {
         if(response){
             console.log("Added new item: " + JSON.stringify(response));
             res.writeHeader(200);
-            res.write("");
+            res.write(JSON.stringify(response));
             res.end();
         }
         if(err){
@@ -500,7 +500,7 @@ app.get("/users", function (req, res, next) {
   });
 
   app.get("/orders", function (req, res, next) {
-    const username=req.body.username?req.body.username:sessionData.username;
+    const username=req.query.username?req.query.username:sessionData.username;
     userClient.getUser({"username":username},(err, response)=>{
         if(response && response.customerID){
             // get customer id of user

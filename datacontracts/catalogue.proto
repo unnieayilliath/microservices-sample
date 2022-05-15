@@ -2,7 +2,7 @@ syntax = "proto3";
 package cataloguePackage;
 service Catalogue {
     //unary
-    rpc addProduct(ProductAddRequest) returns (Product);
+    rpc addProduct(ProductAddRequest) returns (ProductAddResponse);
     rpc getProduct(ProductGetRequest) returns (Product);
     //server streaming
     rpc readCatalogue(nothing) returns (CatalogueReadResponse);
@@ -27,4 +27,9 @@ message CatalogueReadResponse {
 }
 message ProductGetRequest {
     int32 productID = 1;
+}
+
+message ProductAddResponse{
+    bool result=1;
+    string message=2;
 }

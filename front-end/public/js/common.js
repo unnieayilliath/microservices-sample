@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 const nav=[
     {"text":"Home","page":"index.html","AdminOnly":false,"display":"always"},
-    {"text":"Show Cart","page":"cart.html","AdminOnly":false,"display":"always"},
+    {"text":"Show Cart","page":"cart.html","AdminOnly":false,"display":"authenticated"},
     {"text":"Logout","page":"","AdminOnly":false,"display":"authenticated"},
     {"text":"My Account","page":"myaccount.html","AdminOnly":false,"display":"authenticated"},
     {"text":"My Orders","page":"orders.html","AdminOnly":false,"display":"authenticated"},

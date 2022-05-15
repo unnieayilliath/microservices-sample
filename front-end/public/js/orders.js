@@ -2,9 +2,14 @@ $(document).ready(function () {
     getOrders();
 });
 function getOrders() {
+    const username=getParameterByName("username");
+    let queryString="";
+    if(username && username!=""){
+        queryString+=`?username=${username}`;
+    }
     $.ajax({
         dataType: "json",
-        url: "/orders",
+        url: "/orders"+queryString,
         success: function (data) {
             displayOrders(data);
         }

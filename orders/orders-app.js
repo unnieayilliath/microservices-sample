@@ -49,6 +49,7 @@ async function createOrder(call,callback) {
 }
 async function readOrders(call,callback) {
     let response={};
+    console.log("Reading orders for " + call.request.customerID);
     try{
         const rows =await query(`Select Ord.*, COUNT(Det.orderID) as productcount from Orders as Ord
                                  LEFT JOIN OrderDetails as Det on Ord.orderID=Det.orderID
